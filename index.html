@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rubí Te Amo - Flores Amarillas</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            overflow: hidden;
+            background-color: #05020a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+        }
+
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        #ui-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle, rgba(20,5,30,0.85) 0%, rgba(5,2,10,0.95) 100%);
+            transition: opacity 1.2s ease, visibility 1.2s;
+        }
+
+        .card {
+            text-align: center;
+            padding: 40px 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+            max-width: 90%;
+            width: 420px;
+        }
+
+        .icon-sunflower {
+            font-size: 50px;
+            margin-bottom: 15px;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        h1 {
+            color: #ffd700;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        p {
+            color: #e0e0e0;
+            font-size: 1rem;
+            margin-bottom: 25px;
+        }
+
+        #start-btn {
+            padding: 14px 32px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #1a0f00;
+            background: linear-gradient(45deg, #ffd700, #ff9900);
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        #start-btn:hover {
+            transform: scale(1.06);
+            box-shadow: 0 0 35px rgba(255, 215, 0, 0.9);
+            background: linear-gradient(45deg, #ffe033, #ffaa00);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="ui-overlay">
+        <div class="card">
+            <div class="icon-sunflower">🌻</div>
+            <h1>Para Rubí</h1>
+            <p>Haz clic para ingresar al universo de flores amarillas</p>
+            <button id="start-btn">Presiona aquí</button>
+        </div>
+    </div>
+
+    <div id="canvas-container"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <script>
+        let scene, camera, renderer, controls;
+        const objects = [];
+
+        const phrases = [
+            "Rubí te amo feliz día de las flores amarillas Siuuu"
+        ];
+
+        const startBtn = document.getElementById('start-btn');
+        const overlay = document.getElementById('ui-overlay');
+
+        startBtn.addEventListener('click', () => {
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 1200);
+
+            init();
+            animate();
+        });
+
+        function init() {
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x05020a, 0.0012);
+
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 380;
+
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.autoRotate = true;
+            controls.autoRotateSpeed = 1.0;
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
+            scene.add(ambientLight);
+
+            const pointLight = new THREE.PointLight(0xffd700, 2.5, 600);
+            scene.add(pointLight);
+
+            createStars();
+
+            for (let i = 0; i < 120; i++) {
+                if (Math.random() > 0.35) {
+                    createTextSprite(phrases[0]);
+                } else {
+                    createSunflowerSprite();
+                }
+            }
+
+            window.addEventListener('resize', onWindowResize);
+        }
+
+        function createStars() {
+            const geometry = new THREE.BufferGeometry();
+            const count = 2500;
+            const positions = new Float32Array(count * 3);
+
+            for (let i = 0; i < count * 3; i++) {
+                positions[i] = (Math.random() - 0.5) * 1300;
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            const material = new THREE.PointsMaterial({
+                color: 0xffea66,
+                size: 2.2,
+                transparent: true,
+                opacity: 0.85
+            });
+
+            const points = new THREE.Points(geometry, material);
+            scene.add(points);
+        }
+
+        function createTextSprite(text) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 1024;
+            canvas.height = 256;
+
+            ctx.font = 'Bold 42px Arial, sans-serif';
+            ctx.fillStyle = '#ffea00';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            ctx.shadowColor = '#ff8800';
+            ctx.shadowBlur = 18;
+            ctx.fillText(text, 512, 128);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            const material = new THREE.SpriteMaterial({ map: texture, transparent: true });
+            const sprite = new THREE.Sprite(material);
+
+            setRandomPosition(sprite);
+            sprite.scale.set(110, 27.5, 1);
+            scene.add(sprite);
+            objects.push(sprite);
+        }
+
+        function createSunflowerSprite() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 256;
+            canvas.height = 256;
+
+            const cx = 128, cy = 128;
+            
+            ctx.fillStyle = '#ffd700';
+            ctx.shadowColor = '#ff9900';
+            ctx.shadowBlur = 8;
+
+            for (let i = 0; i < 18; i++) {
+                const angle = (i * Math.PI) / 9;
+                ctx.beginPath();
+                ctx.ellipse(cx + Math.cos(angle) * 52, cy + Math.sin(angle) * 52, 32, 11, angle, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            ctx.shadowBlur = 0;
+            ctx.beginPath();
+            ctx.arc(cx, cy, 38, 0, Math.PI * 2);
+            ctx.fillStyle = '#4a2506';
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(cx, cy, 32, 0, Math.PI * 2);
+            ctx.fillStyle = '#361a03';
+            ctx.fill();
+
+            const texture = new THREE.CanvasTexture(canvas);
+            const material = new THREE.SpriteMaterial({ map: texture, transparent: true });
+            const sprite = new THREE.Sprite(material);
+
+            setRandomPosition(sprite);
+            sprite.scale.set(34, 34, 1);
+            scene.add(sprite);
+            objects.push(sprite);
+        }
+
+        function setRandomPosition(sprite) {
+            const radius = 110 + Math.random() * 320;
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos((Math.random() * 2) - 1);
+
+            sprite.position.x = radius * Math.sin(phi) * Math.cos(theta);
+            sprite.position.y = radius * Math.sin(phi) * Math.sin(theta);
+            sprite.position.z = radius * Math.cos(phi);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+    </script>
+</body>
+</html>

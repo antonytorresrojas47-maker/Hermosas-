@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Para Ruby 🌻💛</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    min-height:100vh;
+    overflow:hidden;
+    font-family:Georgia,serif;
+    color:white;
+    background:
+    radial-gradient(circle at 50% 20%,#49370c 0%,#171107 40%,#050505 100%);
+}
+
+/* PANTALLAS */
+
+.pantalla{
+    min-height:100vh;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:25px;
+    text-align:center;
+    position:relative;
+}
+
+.pantalla.activa{
+    display:flex;
+    animation:entrada 1s ease;
+}
+
+.contenido{
+    width:100%;
+    max-width:700px;
+    position:relative;
+    z-index:5;
+}
+
+h1{
+    font-size:clamp(60px,15vw,120px);
+    color:#ffd83d;
+    text-shadow:
+    0 0 10px #ffcf31,
+    0 0 35px #d99e00;
+    margin-bottom:25px;
+}
+
+h2{
+    font-size:clamp(35px,9vw,65px);
+    color:#ffdb4a;
+    margin-bottom:25px;
+}
+
+p{
+    font-size:clamp(19px,4.5vw,27px);
+    line-height:1.6;
+    color:#fff8dc;
+}
+
+.pequeno{
+    margin-top:20px;
+    font-size:15px;
+    color:#c7b987;
+}
+
+.subtitulo{
+    text-transform:uppercase;
+    letter-spacing:5px;
+    color:#ffdc51;
+    font-size:13px;
+    margin-bottom:20px;
+}
+
+/* TARJETA */
+
+.tarjeta{
+    padding:35px 25px;
+    border-radius:30px;
+
+    background:rgba(20,15,5,.78);
+
+    border:1px solid rgba(255,216,70,.35);
+
+    box-shadow:
+    0 20px 70px rgba(0,0,0,.6),
+    inset 0 0 30px rgba(255,210,50,.05);
+
+    backdrop-filter:blur(8px);
+}
+
+/* BOTÓN */
+
+button{
+    margin-top:30px;
+    padding:15px 30px;
+
+    border:none;
+    border-radius:50px;
+
+    background:linear-gradient(
+        135deg,
+        #ffe45c,
+        #e7a914
+    );
+
+    color:#281b00;
+
+    font-size:17px;
+    font-weight:bold;
+
+    cursor:pointer;
+
+    box-shadow:
+    0 10px 30px rgba(255,196,30,.3);
+
+    transition:.25s;
+}
+
+button:hover{
+    transform:scale(1.06);
+}
+
+/* FLORES */
+
+.flor{
+    position:fixed;
+    font-size:45px;
+    z-index:1;
+    animation:flotar 5s ease-in-out infinite;
+}
+
+.f1{
+    left:5%;
+    bottom:7%;
+}
+
+.f2{
+    right:5%;
+    bottom:12%;
+    animation-delay:1s;
+}
+
+.f3{
+    left:12%;
+    top:10%;
+    font-size:30px;
+    animation-delay:2s;
+}
+
+.f4{
+    right:12%;
+    top:15%;
+    font-size:35px;
+    animation-delay:1.5s;
+}
+
+/* CORAZÓN */
+
+.corazon{
+    font-size:90px;
+    margin-bottom:15px;
+
+    animation:latido 1.5s infinite;
+
+    filter:
+    drop-shadow(0 0 20px #ffd83d);
+}
+
+/* SIUU */
+
+.siu{
+    font-family:Arial,sans-serif;
+
+    font-size:clamp(55px,16vw,120px);
+
+    font-weight:900;
+
+    color:#ffd83d;
+
+    text-shadow:
+    0 0 10px #ffca20,
+    0 0 40px #ffb900;
+
+    transform:rotate(-3deg);
+
+    margin-bottom:25px;
+}
+
+/* FRASE */
+
+.frase{
+    margin-top:25px;
+
+    padding:20px;
+
+    border-left:4px solid #ffd83d;
+
+    background:rgba(255,216,61,.06);
+
+    border-radius:0 15px 15px 0;
+
+    text-align:left;
+}
+
+/* LISTA */
+
+.lista{
+    text-align:left;
+    margin:25px auto;
+    max-width:550px;
+}
+
+.lista div{
+    padding:10px 0;
+    font-size:19px;
+    color:#fff5d0;
+}
+
+.lista span{
+    color:#ffd83d;
+    margin-right:10px;
+}
+
+/* PÉTALOS */
+
+.petalo{
+    position:fixed;
+    top:-50px;
+    z-index:20;
+    pointer-events:none;
+
+    animation:caer linear forwards;
+}
+
+/* PROGRESO */
+
+.progreso{
+    position:fixed;
+    top:0;
+    left:0;
+
+    height:4px;
+
+    width:0%;
+
+    background:#ffd83d;
+
+    z-index:100;
+
+    transition:.5s;
+}
+
+/* ANIMACIONES */
+
+@keyframes entrada{
+
+    from{
+        opacity:0;
+        transform:translateY(25px) scale(.97);
+    }
+
+    to{
+        opacity:1;
+        transform:none;
+    }
+
+}
+
+@keyframes flotar{
+
+    0%,100%{
+        transform:translateY(0) rotate(-5deg);
+    }
+
+    50%{
+        transform:translateY(-20px) rotate(5deg);
+    }
+
+}
+
+@keyframes latido{
+
+    0%,100%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.15);
+    }
+
+}
+
+@keyframes caer{
+
+    to{
+        transform:
+        translateY(110vh)
+        rotate(400deg);
+
+        opacity:.2;
+    }
+
+}
+
+@media(max-width:500px){
+
+    .tarjeta{
+        padding:28px 18px;
+    }
+
+    p{
+        font-size:18px;
+    }
+
+}
+</style>
+</head>
+
+
+<body>
+
+<!-- BARRA DE PROGRESO -->
+
+<div class="progreso" id="progreso"></div>
+
+
+<!-- FLORES DECORATIVAS -->
+
+<div class="flor f1">🌻</div>
+<div class="flor f2">🌼</div>
+<div class="flor f3">💛</div>
+<div class="flor f4">🌻</div>
+
+
+<!-- PANTALLA 1 -->
+
+<section class="pantalla activa">
+
+<div class="contenido">
+
+<div class="subtitulo">
+Una pequeña sorpresa para ti
+</div>
+
+<h1>Ruby</h1>
+
+<p>
+Hay personas que llegan a nuestra vida
+y, sin darse cuenta,
+hacen que todo se sienta
+un poquito más bonito. 💛
+</p>
+
+<button onclick="siguiente()">
+Toca aquí 🌻
+</button>
+
+<div class="pequeno">
+Tengo algo que quería decirte...
+</div>
+
+</div>
+
+</section>
+
+
+<!-- PANTALLA 2 -->
+
+<section class="pantalla">
+
+<div class="contenido tarjeta">
+
+<div class="subtitulo">
+Para ti
+</div>
+
+<h2>Ruby 💛</h2>
+
+<p>
+Tu sonrisa tiene una magia que me encanta,
+tu forma de ser es especial
+y hay algo en ti que hace
+que los momentos sencillos
+se sientan diferentes.
+</p>
+
+<div class="frase">
+
+“Entre tantas personas,
+me alegra muchísimo
+haberte encontrado.” ❤️
+
+</div>
+
+<button onclick="siguiente()">
+Hay más... ✨
+</button>
+
+</div>
+
+</section>
+
+
+<!-- PANTALLA 3 -->
+
+<section class="pantalla">
+
+<div class="contenido tarjeta">
+
+<div class="subtitulo">
+Quiero que recuerdes esto
+</div>
+
+<div class="lista">
+
+<div>
+<span>🌻</span>
+Gracias por cada sonrisa.
+</div>
+
+<div>
+<span>💛</span>
+Gracias por cada conversación.
+</div>
+
+<div>
+<span>✨</span>
+Gracias por cada momento bonito.
+</div>
+
+<div>
+<span>🌼</span>
+Gracias simplemente por ser tú.
+</div>
+
+</div>
+
+<p>
+No necesitas cambiar nada
+para ser especial.
+</p>
+
+<button onclick="siguiente()">
+Siguiente 💫
+</button>
+
+</div>
+
+</section>
+
+
+<!-- PANTALLA 4 -->
+
+<section class="pantalla">
+
+<div class="contenido">
+
+<div class="subtitulo">
+Y si tuviera que elegir...
+</div>
+
+<div class="corazon">
+💛
+</div>
+
+<h2>
+Te elegiría a ti.
+</h2>
+
+<p>
+Hoy, mañana y en cada momento
+en el que la vida me preguntara
+quién hace mis días
+un poquito más bonitos.
+</p>
+
+<button onclick="siguiente()">
+Una última cosa... 🌻
+</button>
+
+</div>
+
+</section>
+
+
+<!-- PANTALLA 5 SIUU -->
+
+<section class="pantalla">
+
+<div class="contenido">
+
+<div class="subtitulo">
+Porque sí 😎
+</div>
+
+<div class="siu">
+SIUUUUU
+</div>
+
+<p>
+Porque hoy simplemente quería
+recordarte lo increíble
+y especial que eres para mí.
+</p>
+
+<button onclick="siguiente()">
+Ahora sí... ❤️
+</button>
+
+</div>
+
+</section>
+
+
+<!-- PANTALLA 6 -->
+
+<section class="pantalla">
+
+<div class="contenido tarjeta">
+
+<div class="corazon">
+❤️
+</div>
+
+<h2>
+I love you, Ruby
+</h2>
+
+<p>
+Gracias por existir,
+por sonreír
+y por ser esa persona
+que hace que el mundo
+se sienta un poquito más bonito.
+</p>
+
+<div class="pequeno">
+Con todo mi cariño, para ti. 🌻
+</div>
+
+<button onclick="siguiente();petalos()">
+Abrir el final 🌼
+</button>
+
+</div>
+
+</section>
+
+
+<!-- PANTALLA FINAL -->
+
+<section class="pantalla">
+
+<div class="contenido">
+
+<div class="subtitulo">
+Para que nunca lo olvides
+</div>
+
+<h1>
+Ruby ❤️
+</h1>
+
+<p>
+Eres muy especial para mí.
+</p>
+
+<p style="color:#ffd83d;margin-top:15px;">
+Te quiero mucho. 🌻
+</p>
+
+<div class="pequeno">
+Y esta pequeña sorpresa
+siempre será tuya.
+</div>
+
+<button onclick="inicio()">
+Volver a empezar ↺
+</button>
+
+</div>
+
+</section>
+
+
+<script>
+
+let pagina = 0;
+
+const pantallas =
+document.querySelectorAll(".pantalla");
+
+const progreso =
+document.getElementById("progreso");
+
+
+function mostrar(numero){
+
+    pagina = numero;
+
+    if(pagina < 0){
+        pagina = pantallas.length - 1;
+    }
+
+    if(pagina >= pantallas.length){
+        pagina = 0;
+    }
+
+    pantallas.forEach(
+        (pantalla,index)=>{
+
+            pantalla.classList.toggle(
+                "activa",
+                index === pagina
+            );
+
+        }
+    );
+
+    progreso.style.width =
+        (pagina/(pantallas.length-1))*100 + "%";
+
+}
+
+
+function siguiente(){
+
+    mostrar(pagina + 1);
+
+    petalos();
+
+}
+
+
+function inicio(){
+
+    mostrar(0);
+
+}
+
+
+/* PÉTALOS */
+
+function petalos(){
+
+    const cosas = [
+        "🌻",
+        "🌼",
+        "💛",
+        "✨",
+        "🌸",
+        "❤️"
+    ];
+
+    for(let i=0;i<15;i++){
+
+        const petalo =
+        document.createElement("div");
+
+        petalo.className="petalo";
+
+        petalo.innerHTML =
+        cosas[
+            Math.floor(
+                Math.random()*cosas.length
+            )
+        ];
+
+        petalo.style.left =
+        Math.random()*100+"vw";
+
+        petalo.style.fontSize =
+        (15+Math.random()*22)+"px";
+
+        petalo.style.animationDuration =
+        (3+Math.random()*4)+"s";
+
+        document.body.appendChild(petalo);
+
+        setTimeout(
+            ()=>petalo.remove(),
+            8000
+        );
+
+    }
+
+}
+
+
+/* PETALOS INICIALES */
+
+setTimeout(petalos,700);
+
+</script>
+
+</body>
+</html>
